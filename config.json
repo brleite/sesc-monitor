@@ -1,0 +1,152 @@
+{
+  "notify": true,
+  "headless": true,
+  "urls": [
+    {
+      "url": "http://reservas.sescrio.org.br/reservaonline",
+      "enabled": true,
+      "seletor": "#IndexForm",
+      "params": [
+        {
+          "nome": "unidade",
+          "valor": "Sesc Cabo Frio",
+          "descricao": "Sesc Cabo Frio"
+        }
+      ],
+      "operacoes": [
+        {
+          "tipo": "click",
+          "seletor": "a[href='javascript:void(0)'][class='select2-choice']"
+        },
+        {
+          "tipo": "wait",
+          "seletor": "#select2-drop"
+        },
+        {
+          "tipo": "keyboard",
+          "seletor": ".select2-input",
+          "valor": "Sesc Cabo Frio"
+        },
+        {
+          "tipo": "keyboardSpecial",
+          "valor": "Enter"
+        },
+        {
+          "tipo": "click",
+          "seletor": "#DataInicial"
+        },
+        {
+          "tipo": "verificarDatas",
+          "dataInicial": "08/02/2024",
+          "dataFinal": "15/02/2024"
+        }
+      ],
+      "delay": 2000,
+      "bot_chatIds": ["bot_chatId"]
+    },
+    {
+      "url": "http://reservas.sescrio.org.br/reservaonline",
+      "enabled": true,
+      "seletor": "#IndexForm",
+      "params": [
+        {
+          "nome": "unidade",
+          "valor": "Sesc Grussaí",
+          "descricao": "Sesc Grussaí"
+        }
+      ],
+      "operacoes": [
+        {
+          "tipo": "click",
+          "seletor": "a[href='javascript:void(0)'][class='select2-choice']"
+        },
+        {
+          "tipo": "wait",
+          "seletor": "#select2-drop"
+        },
+        {
+          "tipo": "keyboard",
+          "seletor": ".select2-input",
+          "valor": "Sesc Grussaí"
+        },
+        {
+          "tipo": "keyboardSpecial",
+          "valor": "Enter"
+        },
+        {
+          "tipo": "click",
+          "seletor": "#DataInicial"
+        },
+        {
+          "tipo": "verificarDatas",
+          "dataInicial": "08/02/2024",
+          "dataFinal": "15/02/2024"
+        }
+      ],
+      "delay": 2000,
+      "bot_chatIds": ["bot_chatId"]
+    },
+    {
+      "url": "https://securebr.e-gds.com/sesc/",
+      "enabled": true,
+      "seletor": "#AvailabilitySearch1_MenuSearchInnerContent",
+      "params": [
+        {
+          "nome": "dataInicial",
+          "valor": "20240208",
+          "descricao": "08/02/2024"
+        },
+        {
+          "nome": "dataFinal",
+          "valor": "20240215",
+          "descricao": "15/02/2024"
+        },
+        {
+          "nome": "unidade",
+          "valor": "Sesc Domingos Martins",
+          "descricao": "Sesc Domingos Martins"
+        }
+      ],
+      "operacoes": [
+        {
+          "tipo": "goto",
+          "url": "https://securebr.e-gds.com/sesc/shoppingcart/availability.aspx?arrivaldate=${dataInicial}&departuredate=${dataFinal}&adults=2&children=1&city=domingos%20martins%20-%20es&hotelid=326",
+          "delay": 2000
+        },
+        {
+          "tipo": "click",
+          "seletor": "#AvailabilitySearch1_rpChildrenAges_ddlAge_0"
+        },
+        {
+          "tipo": "wait",
+          "seletor": "option[value='6']"
+        },
+        {
+          "tipo": "keyboard",
+          "seletor": "#AvailabilitySearch1_rpChildrenAges_ddlAge_0",
+          "valor": "6"
+        },
+        {
+          "tipo": "keyboardSpecial",
+          "valor": "Enter"
+        },
+        {
+          "tipo": "click",
+          "seletor": "#AvailabilitySearch1_lnksearch"
+        },
+        {
+          "tipo": "sleep",
+          "valor": "5000"
+        },
+        {
+          "tipo": "check",
+          "seletor": "#ContentPlaceHolder1_HotelCombinedRatePlans_pnRooms",
+          "mensagem": "Período disponível no ${unidade}: ${dataInicial} - ${dataFinal}"
+        }
+      ],
+      "delay": 2000,
+      "bot_chatIds": ["bot_chatId"]
+    }
+  ],
+  "bot_chatIds": ["bot_chatId"]
+}

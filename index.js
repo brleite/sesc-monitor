@@ -12,6 +12,30 @@ function createDateFromString(dateStr) {
   return new Date(parts[2], parts[1] - 1, parts[0]);
 }
 
+function substituirParametros(s, params, campo='valor') {
+  if (params) {
+    for (let i=0; i < params.length; i++) {
+      if (s.includes('${' + params[i].nome + '}')) {
+        s = s.replace('${' + params[i].nome + '}', params[i][campo]);
+      }
+    }
+  }
+
+  return s;
+}
+
+function obterParametro(params, chave, campo='valor') {
+  if (params) {
+    for (let i=0; i < params.length; i++) {
+      if (params[i].nome === chave) {
+        return params[i][campo];
+      }
+    }
+  }
+
+  return '';
+}
+
 async function operacaoKeyboard(page, seletor, valor) {
   utils.log('inicio operação keyboard');
   utils.log(seletor);
@@ -33,8 +57,6 @@ async function operacaoKeyboardSpecial(page, valor) {
   utils.log('fim operação keyboardSpecial');
 }
 
-
-
 async function operacaoClick(page, seletor) {
   utils.log('inicio operação click');
   utils.log(seletor);
@@ -45,6 +67,27 @@ async function operacaoClick(page, seletor) {
   utils.log("click selector")
 
   utils.log('fim operação click');
+}
+
+async function operacaoGoto(page, url, delay, params) {
+  utils.log('inicio operação goto');
+  utils.log('url original: ' + url);
+  utils.log(params);
+
+  url = substituirParametros(url, params);
+
+  utils.log('url tratada: ' + url);
+
+  await Promise.all([
+    page.goto(url),
+    page.waitForNavigation({ waitUntil: "networkidle0" }),
+  ]);
+
+  if (delay) {
+    await utils.sleep(delay);
+  }
+
+  utils.log('fim operação goto');
 }
 
 async function operacaoClickEvaluate(page, seletor, delay) {
@@ -66,14 +109,45 @@ async function operacaoClickEvaluate(page, seletor, delay) {
   utils.log('fim operação clickEvaluate');
 }
 
-async function operacaoSleep(page, delay) {
+async function operacaoSleep(page, valor) {
   utils.log('inicio operação operacaoSleep');
 
-  if (delay) {
-    await page.waitForTimeout(delay);
+  if (valor) {
+    await page.waitForTimeout(valor);
   }
 
   utils.log('fim operação operacaoSleep');
+}
+
+async function operacaoCheck(
+  page,
+  notify,
+  bot_chatIds,
+  seletor,
+  mensagem,
+  params) {
+
+  utils.log('inicio operação check');
+  utils.log(seletor);
+
+  const elementPresent = await page.evaluate(([seletor]) => {
+    const element = document.querySelector(seletor);
+
+    return element ? true : false;
+  }, [seletor]);
+
+  if (elementPresent) {
+    // msg = 'Período disponível no ' + unidade + ": " + dataInicial + " - " + dataFinal;
+    mensagem = substituirParametros(mensagem, params, 'descricao');
+    utils.log(mensagem);
+    if (notify) {
+      utils.sendBotMessage(mensagem, bot_chatIds);
+    }
+  } else {
+    utils.log('Período indisponível');
+  }
+
+  utils.log('fim operação check');
 }
 
 async function operacaoClickEvaluateList(page, seletor, valor, delay) {
@@ -139,7 +213,7 @@ async function operacaoVerificarDatas(
   page,
   notify,
   bot_chatIds,
-  unidade,
+  params,
   dataInicial,
   dataFinal) {
 
@@ -166,7 +240,7 @@ async function operacaoVerificarDatas(
       return;
     }
   }
-  msg = 'Período disponível no ' + unidade + ": " + dataInicial + " - " + dataFinal;
+  msg = 'Período disponível no ' + obterParametro(params, 'unidade') + ": " + dataInicial + " - " + dataFinal;
   utils.log(msg);
   if (notify) {
     utils.sendBotMessage(msg, bot_chatIds);
@@ -298,7 +372,7 @@ async function compare(page,
 (async () => {
   const browser = await puppeteer.launch({
     // executablePath: "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
-    headless: true,
+    headless: config.headless,
     slowMo: 50, // slow down by ms
     // devtools: true,
     args: [
@@ -358,6 +432,8 @@ async function compare(page,
         for (let operacao of p.operacoes) {
           if (operacao.tipo === 'click') {
             await operacaoClick(page, operacao.seletor);
+          } else if (operacao.tipo === 'goto') {
+            await operacaoGoto(page, operacao.url, operacao.delay, p.params);
           } else if (operacao.tipo === 'clickEvaluate') {
             await operacaoClickEvaluate(page, operacao.seletor, operacao.delay);
           } else if (operacao.tipo === 'clickEvaluateList') {
@@ -365,13 +441,21 @@ async function compare(page,
           } else if (operacao.tipo === 'wait') {
             await operacaoWait(page, operacao.seletor);
           } else if (operacao.tipo === 'sleep') {
-            await operacaoSleep(page, operacao.delay);
+            await operacaoSleep(page, operacao.valor);
+          } else if (operacao.tipo === 'check') {
+            await operacaoCheck(
+              page,
+              config.notify,
+              p.bot_chatIds,
+              operacao.seletor,
+              operacao.mensagem,
+              p.params);
           } else if (operacao.tipo === 'verificarDatas') {
             await operacaoVerificarDatas(
               page,
               config.notify,
               p.bot_chatIds,
-              operacao.unidade,
+              p.params,
               operacao.dataInicial,
               operacao.dataFinal);
           } else if (operacao.tipo === 'compare') {
@@ -408,10 +492,11 @@ async function compare(page,
     setTimeout(async () => {
       await browser.close();
 
-      utils.log("Fim");
+      utils.log("Fim - Sucesso");
     }, 2000);
   } catch (e) {
     utils.log(e);
     await browser.close();
+    utils.log("Fim - Erro");
   }
 })();
