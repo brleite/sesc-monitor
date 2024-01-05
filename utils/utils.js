@@ -85,7 +85,7 @@ function getEsgotados(str) {
 
 function sendBotMessage(msg, chatIds = null) {
   const TelegramBot = require("node-telegram-bot-api");
-  const config = require("../config.json");
+  const config = require("./configBot.json");
 
   const TOKEN = config.bot_token;
 
@@ -94,10 +94,10 @@ function sendBotMessage(msg, chatIds = null) {
 
   if (chatIds !== null) {
     chatIds.forEach((p) => {
-      bot.sendMessage(p, msg);
+      bot.sendMessage(config[p], msg);
     });
   } else {
-    const chatIdsTmp = config.bot_chatIds;
+    const chatIdsTmp = [config.bot_chatId];
 
     chatIdsTmp.forEach((p) => {
       bot.sendMessage(p, msg);
@@ -107,7 +107,7 @@ function sendBotMessage(msg, chatIds = null) {
 
 function sendBotImage(image, caption, chatIds = null) {
   const TelegramBot = require("node-telegram-bot-api");
-  const config = require("../config.json");
+  const config = require("./configBot.json");
 
   const TOKEN = config.bot_token;
 
@@ -116,10 +116,10 @@ function sendBotImage(image, caption, chatIds = null) {
 
   if (chatIds !== null) {
     chatIds.forEach((p) => {
-      bot.sendPhoto(p, image, { caption: caption });
+      bot.sendPhoto(config[p], image, { caption: caption });
     });
   } else {
-    const chatIdsTmp = config.bot_chatIds;
+    const chatIdsTmp = [config.bot_chatId];
 
     chatIdsTmp.forEach((p) => {
       bot.sendPhoto(p, image, { caption: caption });
@@ -129,7 +129,7 @@ function sendBotImage(image, caption, chatIds = null) {
 
 function sendBotDocument(document, caption, chatIds = null) {
   const TelegramBot = require("node-telegram-bot-api");
-  const config = require("../config.json");
+  const config = require("./configBot.json");
 
   const TOKEN = config.bot_token;
 
@@ -138,10 +138,10 @@ function sendBotDocument(document, caption, chatIds = null) {
 
   if (chatIds !== null) {
     chatIds.forEach((p) => {
-      bot.sendDocument(p, document, { caption: caption });
+      bot.sendDocument(config[p], document, { caption: caption });
     });
   } else {
-    const chatIdsTmp = config.bot_chatIds;
+    const chatIdsTmp = [config.bot_chatId];
 
     chatIdsTmp.forEach((p) => {
       bot.sendPhoto(p, document, { caption: caption });

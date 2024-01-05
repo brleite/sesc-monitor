@@ -34,5 +34,6 @@ yarn-error.log*
 
 .env
 
-config.json
+#config.json
 config_bkp.json
+/utils/configBot.json
