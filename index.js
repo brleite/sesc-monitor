@@ -372,7 +372,7 @@ async function compare(page,
 (async () => {
   const browser = await puppeteer.launch({
     // executablePath: "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
-    headless: false,
+    headless: config.headless,
     slowMo: 50, // slow down by ms
     // devtools: true,
     args: [

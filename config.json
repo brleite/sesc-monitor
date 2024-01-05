@@ -1,5 +1,6 @@
 {
   "notify": true,
+  "headless": true,
   "urls": [
     {
       "url": "http://reservas.sescrio.org.br/reservaonline",
@@ -92,13 +93,13 @@
       "params": [
         {
           "nome": "dataInicial",
-          "valor": "20240308",
-          "descricao": "08/03/2024"
+          "valor": "20240208",
+          "descricao": "08/02/2024"
         },
         {
           "nome": "dataFinal",
-          "valor": "20240315",
-          "descricao": "15/03/2024"
+          "valor": "20240215",
+          "descricao": "15/02/2024"
         },
         {
           "nome": "unidade",
