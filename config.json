@@ -4,7 +4,7 @@
   "urls": [
     {
       "url": "http://reservas.sescrio.org.br/reservaonline",
-      "enabled": true,
+      "enabled": false,
       "seletor": "#IndexForm",
       "params": [
         {
@@ -131,6 +131,10 @@
           "valor": "Enter"
         },
         {
+          "tipo": "sleep",
+          "valor": "2000"
+        },
+        {
           "tipo": "click",
           "seletor": "#AvailabilitySearch1_lnksearch"
         },
@@ -141,6 +145,71 @@
         {
           "tipo": "check",
           "seletor": "#ContentPlaceHolder1_HotelCombinedRatePlans_pnRooms",
+          "mensagem": "Período disponível no ${unidade}: ${dataInicial} - ${dataFinal}"
+        }
+      ],
+      "delay": 2000,
+      "bot_chatIds": ["bot_chatId"]
+    },
+    {
+      "url": "https://securebr.e-gds.com/sescmg/",
+      "enabled": true,
+      "seletor": "#ctl00_AvailabilitySearch1_MenuSearchInnerContent",
+      "params": [
+        {
+          "nome": "dataInicial",
+          "valor": "20240208",
+          "descricao": "08/02/2024"
+        },
+        {
+          "nome": "dataFinal",
+          "valor": "20240215",
+          "descricao": "15/02/2024"
+        },
+        {
+          "nome": "unidade",
+          "valor": "Sesc Ouro Preto",
+          "descricao": "Sesc Ouro Preto"
+        }
+      ],
+      "operacoes": [
+        {
+          "tipo": "goto",
+          "url": "https://securebr.e-gds.com/sescmg/shoppingcart/availabilityhotel.aspx?hotelid=274&arrivaldate=${dataInicial}&departuredate=${dataFinal}&adults=2&&children=1&country=31&city=ouro+preto",          
+          "delay": 2000
+        },
+        {
+          "tipo": "click",
+          "seletor": "#ctl00_AvailabilitySearch1_rpChildrenAges_ctl00_ddlAge"
+        },
+        {
+          "tipo": "wait",
+          "seletor": "option[value='6']"
+        },
+        {
+          "tipo": "keyboard",
+          "seletor": "#ctl00_AvailabilitySearch1_rpChildrenAges_ctl00_ddlAge",          
+          "valor": "6"
+        },
+        {
+          "tipo": "sleep",
+          "valor": "2000"
+        },
+        {
+          "tipo": "keyboardSpecial",
+          "valor": "Enter"
+        },
+        {
+          "tipo": "click",
+          "seletor": "#ctl00_AvailabilitySearch1_lnksearch"
+        },
+        {
+          "tipo": "sleep",
+          "valor": "5000"
+        },
+        {
+          "tipo": "check",
+          "seletor": "#ctl00_ContentPlaceHolder1_HotelCombinedRatePlans_pnRooms",          
           "mensagem": "Período disponível no ${unidade}: ${dataInicial} - ${dataFinal}"
         }
       ],
