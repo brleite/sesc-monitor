@@ -4,9 +4,19 @@
   "urls": [
     {
       "url": "http://reservas.sescrio.org.br/reservaonline",
-      "enabled": false,
+      "enabled": true,
       "seletor": "#IndexForm",
       "params": [
+        {
+          "nome": "dataInicial",
+          "valor": "20240208",
+          "descricao": "08/02/2024"
+        },
+        {
+          "nome": "dataFinal",
+          "valor": "20240215",
+          "descricao": "15/02/2024"
+        },
         {
           "nome": "unidade",
           "valor": "Sesc Cabo Frio",
@@ -37,8 +47,37 @@
         },
         {
           "tipo": "verificarDatas",
-          "dataInicial": "08/02/2024",
-          "dataFinal": "15/02/2024"
+          "dataInicial": "${dataInicial}",
+          "dataFinal": "${dataFinal}",
+          "failOnUnavailable": true,
+          "notifyOnAvailable": false
+        },
+        {
+          "tipo": "clickSpecial",
+          "seletor": "td[data-month='$month(${dataInicial})'][data-year='$year(${dataInicial})']",
+          "valor": "$day(${dataInicial})"
+        },
+        {
+          "tipo": "click",
+          "seletor": "#DataFinal"
+        },
+        {
+          "tipo": "clickSpecial",
+          "seletor": "td[data-month='$month(${dataFinal})'][data-year='$year(${dataInicial})']",
+          "valor": "$day(${dataFinal})"
+        },
+        {
+          "tipo": "click",
+          "seletor": "#btnAvancar"
+        },
+        {
+          "tipo": "sleep",
+          "valor": "2000"
+        },
+        {
+          "tipo": "check",
+          "seletor": "#btnCalcular",
+          "mensagem": "Período disponível no ${unidade}: ${dataInicial} - ${dataFinal}"
         }
       ],
       "delay": 2000,
@@ -49,6 +88,16 @@
       "enabled": true,
       "seletor": "#IndexForm",
       "params": [
+        {
+          "nome": "dataInicial",
+          "valor": "20240208",
+          "descricao": "08/02/2024"
+        },
+        {
+          "nome": "dataFinal",
+          "valor": "20240215",
+          "descricao": "15/02/2024"
+        },
         {
           "nome": "unidade",
           "valor": "Sesc Grussaí",
@@ -79,8 +128,37 @@
         },
         {
           "tipo": "verificarDatas",
-          "dataInicial": "08/02/2024",
-          "dataFinal": "15/02/2024"
+          "dataInicial": "${dataInicial}",
+          "dataFinal": "${dataFinal}",
+          "failOnUnavailable": true,
+          "notifyOnAvailable": false
+        },
+        {
+          "tipo": "clickSpecial",
+          "seletor": "td[data-month='$month(${dataInicial})'][data-year='$year(${dataInicial})']",
+          "valor": "$day(${dataInicial})"
+        },
+        {
+          "tipo": "click",
+          "seletor": "#DataFinal"
+        },
+        {
+          "tipo": "clickSpecial",
+          "seletor": "td[data-month='$month(${dataFinal})'][data-year='$year(${dataInicial})']",
+          "valor": "$day(${dataFinal})"
+        },
+        {
+          "tipo": "click",
+          "seletor": "#btnAvancar"
+        },
+        {
+          "tipo": "sleep",
+          "valor": "2000"
+        },
+        {
+          "tipo": "check",
+          "seletor": "#btnCalcular",
+          "mensagem": "Período disponível no ${unidade}: ${dataInicial} - ${dataFinal}"
         }
       ],
       "delay": 2000,
@@ -175,7 +253,7 @@
       "operacoes": [
         {
           "tipo": "goto",
-          "url": "https://securebr.e-gds.com/sescmg/shoppingcart/availabilityhotel.aspx?hotelid=274&arrivaldate=${dataInicial}&departuredate=${dataFinal}&adults=2&&children=1&country=31&city=ouro+preto",          
+          "url": "https://securebr.e-gds.com/sescmg/shoppingcart/availabilityhotel.aspx?hotelid=274&arrivaldate=${dataInicial}&departuredate=${dataFinal}&adults=2&&children=1&country=31&city=ouro+preto",
           "delay": 2000
         },
         {
@@ -188,7 +266,7 @@
         },
         {
           "tipo": "keyboard",
-          "seletor": "#ctl00_AvailabilitySearch1_rpChildrenAges_ctl00_ddlAge",          
+          "seletor": "#ctl00_AvailabilitySearch1_rpChildrenAges_ctl00_ddlAge",
           "valor": "6"
         },
         {
@@ -209,7 +287,7 @@
         },
         {
           "tipo": "check",
-          "seletor": "#ctl00_ContentPlaceHolder1_HotelCombinedRatePlans_pnRooms",          
+          "seletor": "#ctl00_ContentPlaceHolder1_HotelCombinedRatePlans_pnRooms",
           "mensagem": "Período disponível no ${unidade}: ${dataInicial} - ${dataFinal}"
         }
       ],

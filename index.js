@@ -7,6 +7,31 @@ const jsdiff = require('./utils/jsdiff');
 const diff = require('node-htmldiff');
 const { create } = require("domain");
 
+function getCallbackSpecialFunctionName(s) {
+  return function(matched) {
+    let dataTmp = createDateFromString(matched.substring(s.length + 2, s.length + 2 + 10));
+
+    if (s === 'day') {
+      return '' + dataTmp.getDate();
+    } else if (s === 'month') {
+      return '' + dataTmp.getMonth();
+    } else if (s === 'year') {
+      return '' + dataTmp.getFullYear();
+    } else {
+      throw new Error('Função não implementada: ' + s);
+    }
+  }
+}
+
+function substituirSpecialFunction(s, specialFunction) {
+  let regex = new RegExp('\\$' + specialFunction + '\\([0-9][0-9]\/[0-9][0-9]\/[0-9][0-9][0-9][0-9]\\)', 'g');
+
+  //s = s.replace(/\$specialFunction\(.*\)/g, getCallbackSpecialFunctionName(specialFunction));
+  s = s.replaceAll(regex, getCallbackSpecialFunctionName(specialFunction));
+
+  return s;
+}
+
 function createDateFromString(dateStr) {
   let parts = dateStr.split("/");
   return new Date(parts[2], parts[1] - 1, parts[0]);
@@ -16,10 +41,14 @@ function substituirParametros(s, params, campo='valor') {
   if (params) {
     for (let i=0; i < params.length; i++) {
       if (s.includes('${' + params[i].nome + '}')) {
-        s = s.replace('${' + params[i].nome + '}', params[i][campo]);
+        s = s.replaceAll('${' + params[i].nome + '}', params[i][campo]);
       }
     }
   }
+
+  s = substituirSpecialFunction(s, 'day');
+  s = substituirSpecialFunction(s, 'month');
+  s = substituirSpecialFunction(s, 'year');
 
   return s;
 }
@@ -67,6 +96,21 @@ async function operacaoClick(page, seletor) {
   utils.log("click selector")
 
   utils.log('fim operação click');
+}
+
+async function operacaoClickSpecial(page, seletor, valor, params) {
+  utils.log('inicio operação clickSpecial');
+  utils.log(seletor);
+  utils.log(valor);
+
+  await page.waitForSelector(seletor);
+  utils.log("wait for selector")
+
+  await page.evaluate(([seletor, valor]) => {
+    Array.from(document.querySelectorAll(seletor)).find(el => el.textContent === valor).click();
+  }, [seletor, valor]);
+
+  utils.log('fim operação clickSpecial');
 }
 
 async function operacaoGoto(page, url, delay, params) {
@@ -237,7 +281,7 @@ async function operacaoVerificarDatas(
     if (classes.includes('dataIndisponivel')) {
       utils.log('Período indisponível');
 
-      return;
+      return false;
     }
   }
   msg = 'Período disponível no ' + obterParametro(params, 'unidade') + ": " + dataInicial + " - " + dataFinal;
@@ -247,6 +291,8 @@ async function operacaoVerificarDatas(
   }
 
   utils.log('fim operação verificarDatas');
+
+  return true
 }
 
 async function operacaoCompare(page,
@@ -432,6 +478,15 @@ async function compare(page,
         for (let operacao of p.operacoes) {
           if (operacao.tipo === 'click') {
             await operacaoClick(page, operacao.seletor);
+          } else if (operacao.tipo === 'clickSpecial') {
+            seletorTmp = substituirParametros(operacao.seletor, p.params, 'descricao');
+            valorTmp = substituirParametros(operacao.valor, p.params, 'descricao');
+
+            await operacaoClickSpecial(
+              page,
+              seletorTmp,
+              valorTmp,
+              p.params);
           } else if (operacao.tipo === 'goto') {
             await operacaoGoto(page, operacao.url, operacao.delay, p.params);
           } else if (operacao.tipo === 'clickEvaluate') {
@@ -451,13 +506,21 @@ async function compare(page,
               operacao.mensagem,
               p.params);
           } else if (operacao.tipo === 'verificarDatas') {
-            await operacaoVerificarDatas(
+            dataInicialTmp = substituirParametros(operacao.dataInicial, p.params, 'descricao');
+            dataFinalTmp = substituirParametros(operacao.dataFinal, p.params, 'descricao');
+
+            retorno = await operacaoVerificarDatas(
               page,
-              config.notify,
+              config.notify && operacao.notifyOnAvailable,
               p.bot_chatIds,
               p.params,
-              operacao.dataInicial,
-              operacao.dataFinal);
+              dataInicialTmp,
+              dataFinalTmp,
+              operacao.notifyOnAvailable);
+            if (retorno === false && (operacao.failOnUnavailable === undefined || operacao.failOnUnavailable === true)) {
+              utils.log('Abortando checks adicionais');
+              break;
+            }
           } else if (operacao.tipo === 'compare') {
             await operacaoCompare(page,
                             p.url,
