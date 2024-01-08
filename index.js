@@ -27,7 +27,7 @@ function substituirSpecialFunction(s, specialFunction) {
   let regex = new RegExp('\\$' + specialFunction + '\\([0-9][0-9]\/[0-9][0-9]\/[0-9][0-9][0-9][0-9]\\)', 'g');
 
   //s = s.replace(/\$specialFunction\(.*\)/g, getCallbackSpecialFunctionName(specialFunction));
-  s = s.replaceAll(regex, getCallbackSpecialFunctionName(specialFunction));
+  s = s.replace(regex, getCallbackSpecialFunctionName(specialFunction));
 
   return s;
 }
@@ -40,8 +40,8 @@ function createDateFromString(dateStr) {
 function substituirParametros(s, params, campo='valor') {
   if (params) {
     for (let i=0; i < params.length; i++) {
-      if (s.includes('${' + params[i].nome + '}')) {
-        s = s.replaceAll('${' + params[i].nome + '}', params[i][campo]);
+      while (s.includes('${' + params[i].nome + '}')) {
+        s = s.replace('${' + params[i].nome + '}', params[i][campo]);
       }
     }
   }
