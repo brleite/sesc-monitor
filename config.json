@@ -166,7 +166,7 @@
     },
     {
       "url": "https://securebr.e-gds.com/sesc/",
-      "enabled": true,
+      "enabled": false,
       "seletor": "#AvailabilitySearch1_MenuSearchInnerContent",
       "params": [
         {
