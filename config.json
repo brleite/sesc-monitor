@@ -1,6 +1,6 @@
 {
   "notify": true,
-  "headless": true,
+  "headless": false,
   "urls": [
     {
       "url": "http://reservas.sescrio.org.br/reservaonline",
@@ -9,13 +9,13 @@
       "params": [
         {
           "nome": "dataInicial",
-          "valor": "20240208",
-          "descricao": "08/02/2024"
+          "valor": "20250228",
+          "descricao": "28/02/2025"
         },
         {
           "nome": "dataFinal",
-          "valor": "20240215",
-          "descricao": "15/02/2024"
+          "valor": "20250305",
+          "descricao": "05/03/2025"
         },
         {
           "nome": "unidade",
@@ -85,7 +85,7 @@
     },
     {
       "url": "http://reservas.sescrio.org.br/reservaonline",
-      "enabled": true,
+      "enabled": false,
       "seletor": "#IndexForm",
       "params": [
         {
@@ -166,7 +166,7 @@
     },
     {
       "url": "https://securebr.e-gds.com/sesc/",
-      "enabled": true,
+      "enabled": false,
       "seletor": "#AvailabilitySearch1_MenuSearchInnerContent",
       "params": [
         {
@@ -231,7 +231,7 @@
     },
     {
       "url": "https://securebr.e-gds.com/sescmg/",
-      "enabled": true,
+      "enabled": false,
       "seletor": "#ctl00_AvailabilitySearch1_MenuSearchInnerContent",
       "params": [
         {
