@@ -1,10 +1,10 @@
 {
-  "notify": true,
-  "headless": true,
+  "notify": false,
+  "headless": false,
   "urls": [
     {
       "url": "http://reservas.sescrio.org.br/reservaonline",
-      "enabled": true,
+      "enabled": false,
       "seletor": "#IndexForm",
       "params": [
         {
@@ -84,19 +84,19 @@
       "bot_chatIds": ["bot_chatId"]
     },
     {
-      "url": "http://reservas.sescrio.org.br/reservaonline",
-      "enabled": false,
+      "url": "https://sescrio.e-gds.com/SESCRJ/",
+      "enabled": true,
       "seletor": "#IndexForm",
       "params": [
         {
           "nome": "dataInicial",
-          "valor": "20240208",
-          "descricao": "08/02/2024"
+          "valor": "20250228",
+          "descricao": "28/02/2025"
         },
         {
           "nome": "dataFinal",
-          "valor": "20240215",
-          "descricao": "15/02/2024"
+          "valor": "20250305",
+          "descricao": "05/03/2025"
         },
         {
           "nome": "unidade",
@@ -106,58 +106,50 @@
       ],
       "operacoes": [
         {
-          "tipo": "click",
-          "seletor": "a[href='javascript:void(0)'][class='select2-choice']"
-        },
-        {
-          "tipo": "wait",
-          "seletor": "#select2-drop"
-        },
-        {
-          "tipo": "keyboard",
-          "seletor": ".select2-input",
-          "valor": "Sesc Grussaí"
-        },
-        {
-          "tipo": "keyboardSpecial",
-          "valor": "Enter"
+          "tipo": "goto",
+          "url": "https://sescrio.e-gds.com/sescrj/shoppingcart/availability.aspx?arrivaldate=${dataInicial}&departuredate=${dataFinal}&adults=2&children=1&city=são%20joão%20da%20barra&hotelid=15",
+          "delay": 2000
         },
         {
           "tipo": "click",
-          "seletor": "#DataInicial"
-        },
-        {
-          "tipo": "verificarDatas",
-          "dataInicial": "${dataInicial}",
-          "dataFinal": "${dataFinal}",
-          "failOnUnavailable": true,
-          "notifyOnAvailable": false
-        },
-        {
-          "tipo": "clickSpecial",
-          "seletor": "td[data-month='$month(${dataInicial})'][data-year='$year(${dataInicial})']",
-          "valor": "$day(${dataInicial})"
-        },
-        {
-          "tipo": "click",
-          "seletor": "#DataFinal"
-        },
-        {
-          "tipo": "clickSpecial",
-          "seletor": "td[data-month='$month(${dataFinal})'][data-year='$year(${dataInicial})']",
-          "valor": "$day(${dataFinal})"
-        },
-        {
-          "tipo": "click",
-          "seletor": "#btnAvancar"
+          "seletor": "#eGDSCookiesWindowClose"
         },
         {
           "tipo": "sleep",
           "valor": "2000"
         },
         {
+          "tipo": "click",
+          "seletor": "#ctl00_AvailabilitySearch1_rpChildrenAges_ctl00_divChildrenAge"
+        },
+        {
+          "tipo": "wait",
+          "seletor": "option[value='7']"
+        },
+        {
+          "tipo": "keyboard",
+          "seletor": "#ctl00_AvailabilitySearch1_rpChildrenAges_ctl00_divChildrenAge",
+          "valor": "7"
+        },
+        {
+          "tipo": "keyboardSpecial",
+          "valor": "Enter"
+        },
+        {
+          "tipo": "sleep",
+          "valor": "2000"
+        },
+        {
+          "tipo": "click",
+          "seletor": "#ctl00_AvailabilitySearch1_lnksearch"
+        },
+        {
+          "tipo": "sleep",
+          "valor": "5000"
+        },
+        {
           "tipo": "check",
-          "seletor": "#btnCalcular",
+          "seletor": "#ContentPlaceHolder1_HotelCombinedRatePlans_pnRooms",
           "mensagem": "Período disponível no ${unidade}: ${dataInicial} - ${dataFinal}"
         }
       ],
@@ -171,13 +163,13 @@
       "params": [
         {
           "nome": "dataInicial",
-          "valor": "20240208",
-          "descricao": "08/02/2024"
+          "valor": "20250228",
+          "descricao": "28/02/2025"
         },
         {
           "nome": "dataFinal",
-          "valor": "20240215",
-          "descricao": "15/02/2024"
+          "valor": "20250305",
+          "descricao": "05/03/2025"
         },
         {
           "nome": "unidade",
@@ -193,16 +185,24 @@
         },
         {
           "tipo": "click",
+          "seletor": "#eGDSCookiesWindowClose"
+        },
+        {
+          "tipo": "sleep",
+          "valor": "2000"
+        },
+        {
+          "tipo": "click",
           "seletor": "#AvailabilitySearch1_rpChildrenAges_ddlAge_0"
         },
         {
           "tipo": "wait",
-          "seletor": "option[value='6']"
+          "seletor": "option[value='7']"
         },
         {
           "tipo": "keyboard",
           "seletor": "#AvailabilitySearch1_rpChildrenAges_ddlAge_0",
-          "valor": "6"
+          "valor": "7"
         },
         {
           "tipo": "keyboardSpecial",
@@ -236,13 +236,13 @@
       "params": [
         {
           "nome": "dataInicial",
-          "valor": "20240208",
-          "descricao": "08/02/2024"
+          "valor": "20250228",
+          "descricao": "28/02/2025"
         },
         {
           "nome": "dataFinal",
-          "valor": "20240215",
-          "descricao": "15/02/2024"
+          "valor": "20250305",
+          "descricao": "05/03/2025"
         },
         {
           "nome": "unidade",
@@ -262,12 +262,12 @@
         },
         {
           "tipo": "wait",
-          "seletor": "option[value='6']"
+          "seletor": "option[value='7']"
         },
         {
           "tipo": "keyboard",
           "seletor": "#ctl00_AvailabilitySearch1_rpChildrenAges_ctl00_ddlAge",
-          "valor": "6"
+          "valor": "7"
         },
         {
           "tipo": "sleep",
