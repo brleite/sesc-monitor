@@ -1,6 +1,6 @@
 {
   "notify": true,
-  "headless": false,
+  "headless": true,
   "urls": [
     {
       "url": "http://reservas.sescrio.org.br/reservaonline",
