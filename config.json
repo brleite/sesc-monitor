@@ -1,6 +1,6 @@
 {
-  "notify": false,
-  "headless": false,
+  "notify": true,
+  "headless": true,
   "urls": [
     {
       "url": "http://reservas.sescrio.org.br/reservaonline",
@@ -149,7 +149,7 @@
         },
         {
           "tipo": "check",
-          "seletor": "#ContentPlaceHolder1_HotelCombinedRatePlans_pnRooms",
+          "seletor": "#ctl00_ContentPlaceHolder1_HotelCombinedRatePlans_pnRooms",
           "mensagem": "Período disponível no ${unidade}: ${dataInicial} - ${dataFinal}"
         }
       ],
